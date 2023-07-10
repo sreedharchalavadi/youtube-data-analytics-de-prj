@@ -21,7 +21,7 @@ AWS Lambda: Lambda is a computing service that allows programmers to run code wi
 AWS Athena: Athena is an interactive query service for S3 in which there is no need to load data it stays in S3.
 ** se **
 
-3. **AWS CLOUD **
+3. ** AWS CLOUD **
 2. **AWS Lambda :**
 
 3. **Cloud Watch :**
