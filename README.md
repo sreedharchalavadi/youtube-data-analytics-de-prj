@@ -13,24 +13,15 @@ This project was created to securely manage, streamline, and perform analysis on
 
 ## Services used
 
-1. **S3 (Simple Storage Service) :** Its an is an object storage service that provides manufacturing scalability, data availability, security, and performance.
-AWS IAM: This is nothing but identity and access management which enables us to manage access to AWS services and resources securely.
-QuickSight: Amazon QuickSight is a scalable, serverless, embeddable, machine learning-powered business intelligence (BI) service built for the cloud.
-AWS Glue: A serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development.
-AWS Lambda: Lambda is a computing service that allows programmers to run code without creating or managing servers.
-AWS Athena: Athena is an interactive query service for S3 in which there is no need to load data it stays in S3.
-** se **
-
-3. ** AWS CLOUD **
-2. **AWS Lambda :**
-
-3. **Cloud Watch :**
-
+1. **AWS S3 (Simple Storage Service) :** Its an object storage service that provides manufacturing scalability, data availability, security, and performance. Its a highly scalable object storage service that can store and retrieve any amount of data from anywhere on the web.It is commonly used to store and distribute large media files, data backups and static website files.
+2. **AWS IAM :** This is nothing but identity and access management which enables us to manage access to AWS services and resources securely.
+3. **AWS Glue :** A serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development.
 4. **Glue Crawler :**
-
 5. **Data  Catalog :** 
-
-6. **Amazon Athena : **
+6. **AWS Lambda :** Lambda is a computing service that allows programmers to run code without creating or managing servers.We can use lambda to run code in response to events like changes in s3, DynamoDB, or other AWS services
+7. **AWS Athena :** Athena is an interactive query service that makes it easy to analyze data in amazon s3 using standard SQL. We can use Athena to analyze data in Glue Data catalog or in other s3 buckets
+8. **Cloud Watch :**
+9. **QuickSight :** Amazon QuickSight is a scalable, serverless, embeddable, machine learning-powered business intelligence (BI) service built for the cloud.
 
 ### Installed Packages
 
