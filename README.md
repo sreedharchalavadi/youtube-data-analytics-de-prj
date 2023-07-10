@@ -12,7 +12,7 @@ This project was created to securely manage, streamline, and perform analysis on
 6. Reporting — Build a dashboard to get answers to the question we asked earlier.
 
 ### Architecture
-![Architecture diagram]()
+![Architecture diagram](https://github.com/sreedharchalavadi/youtube-data-analytics-de-prj/blob/main/architecture.jpeg)
 
 ### Services used
 
