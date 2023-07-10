@@ -33,3 +33,6 @@ This Kaggle dataset contains statistics (CSV files) on daily popular YouTube vid
 
 This contains the information about the youtube dataset used in this project.
 [Youtube Kaggle dataset](https://www.kaggle.com/datasets/datasnaek/youtube-new)
+
+### Project Execution Flow
+Extract data from API (Explain about the youtube data anlysis project here ????????????????????????)  --> Lambda Trigger (every 1 hour) --> Run extract code --> Store Raw data --> Trigger Transform function --> Transform the data and load it to s3 --> Glue crawler to create the data catalogs on s3 --> Query using Athena
