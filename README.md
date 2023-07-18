@@ -34,5 +34,56 @@ This Kaggle dataset contains statistics (CSV files) on daily popular YouTube vid
 This contains the information about the youtube dataset used in this project.
 [Youtube Kaggle dataset](https://www.kaggle.com/datasets/datasnaek/youtube-new)
 
-### Project Execution Flow
-Extract data from API (Explain about the youtube data anlysis project here ????????????????????????)  --> Lambda Trigger (every 1 hour) --> Run extract code --> Store Raw data --> Trigger Transform function --> Transform the data and load it to s3 --> Glue crawler to create the data catalogs on s3 --> Query using Athena
+## Project Execution Flow
+
+#### There are 2 set of files in Kaggle
+a. Json files based on the region : This contains the category ids and their description for the videos present in the csv files.
+b. csv files based on the region : This contains the information of the individual videos like the video title, channel title, publish time, tags, views, likes and dislikes, description, and comment count.
+
+#### Goal is to identify the trending video categories from the dataset based on different regions. So that we can target our audiences accordingly.  
+
+1. created s3 buckets for the raw layer and loaded the data into the below folders using aws cli commands.
+raw layer having category information data in json: s3://sree-de-on-youtube-raw-dev/youtube/raw_statistics_reference_data/
+raw layer having video information region wise data in csv : s3://sree-de-on-youtube-raw-dev/youtube/raw_statistics/region=ca/
+
+2. We need to create the lambda function to cleanse this json data and convert into parquet files (rows and columns). 
+Further store this in the cleaned buckets and create a Glue catalog tables on top of this bucket using the crawler.
+
+3. In lambda code, Dataframes are used to extract the items part from the json file. 
+AWS data wrangler layer library is used to transform this json data into parquet format and store the files into cleaned s3 bucket. 
+Bucket and path : s3://sree-de-on-youtube-cleansed-dev/youtube.
+Glue catalog tables were created on top of the above s3 path : db_youtube_cleaned.cleaned_statistics_reference_data
+Added the s3 trigger, so whenever there are new json files in the raw layer lambda code will run and store the data into above cleaned buckets.
+
+4. Created a glue studio etl job to transform the csv files in the raw layer to the cleaned layer.
+Retained the datatypes of big int in csv to bigint as it is in the cleaned parquet files.
+
+5. Modified the pyspark code in etl to store the data in the cleaned layer with region as a partitioned columns.
+Bucket : s3://sree-de-on-youtube-cleansed-dev/youtube/raw_statistics/ --> region wise data
+Used predicate pushdown to filter out the fewer regions.
+
+6. Created the glue crawler on s3://sree-de-on-youtube-cleansed-dev/youtube/raw_statistics/ --> region wise data and ran it. 
+This will create the glue catalog tables on the raws statistics data in the cleaned bucket --> db_youtube_cleaned.raw_statistics.
+
+7. Query the above cleaned tables using Athena.
+    
+    To get the raw data
+    SELECT a.title, a.category_id, b.snippet_title FROM "de_youtube_raw"."raw_statistics" a
+    inner join "db_youtube_cleaned"."cleaned_statistics_reference_data" b on a.category_id=b.id where a.region ='ca' limit 5;
+    
+    To get the cleaned data
+    SELECT a.title, a.category_id, b.snippet_title FROM "db_youtube_cleaned"."raw_statistics" a
+    inner join "db_youtube_cleaned"."cleaned_statistics_reference_data" b on a.category_id=b.id where a.region ='ca' limit 5;
+
+8. Created the final Reporting layer with the ETL pipeline using AWS glue studio--> Created a job using visual with a source and target.
+Joined the two tables from the cleaned layer as mentioned in the above query and store the results in the new bucket: sree-de-on-youtube-analytics-dev.
+Also we need to create a analytics table on top of this final layer :  db_youtube_analytics.final_analytics. 
+Run this ETL job which will create a new table on top of the analytics db with region as partitioned column.
+
+9. Now query the results using the athena.
+SELECT * FROM "db_youtube_analytics"."final_analytics" limit 10;
+
+10. The final layer will be given to the data scientists so that they can run this simple query and create some Machine learning modules.
+
+11. quicksight was used to create the dataset on top of the final analytics table : db_youtube_analytics.final_analytics with data source as s3 :sree-de-on-youtube-analytics-dev. 
+We can create multiple analysis on top of this dataset and display them in various chart.
