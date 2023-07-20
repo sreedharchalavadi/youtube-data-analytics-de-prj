@@ -42,6 +42,8 @@ b. csv files based on the region : This contains the information of the individu
 
 #### Goal is to identify the trending video categories from the dataset based on different regions. So that we can target our audiences accordingly.  
 
+#### Steps Executed
+
 1. created s3 buckets for the raw layer and loaded the data into the below folders using aws cli commands.
 raw layer having category information data in json: s3://sree-de-on-youtube-raw-dev/youtube/raw_statistics_reference_data/
 raw layer having video information region wise data in csv : s3://sree-de-on-youtube-raw-dev/youtube/raw_statistics/region=ca/
